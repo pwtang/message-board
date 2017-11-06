@@ -22,11 +22,14 @@ class Message extends Component {
   }
 
   render() {
+    let cts = this.props.dateTime;
+    let mDate = new Date(cts).toLocaleString();
     return (
       <div>
         <li>
           Hello 👋 {this.props.text}
           <i class="fa fa-trash pull-right delete" onClick={this.handleTrash} />
+          <i class="pull-right"> {mDate} </i>
           <i
             class="fa fa-thumbs-down pull-right"
             onClick={this.handleThumbsDown}

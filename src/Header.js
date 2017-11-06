@@ -6,7 +6,8 @@ class Header extends Component {
   }
   render() {
     let cts = this.props.date;
-    let cdate = new Date(cts).toString();
+    let cDate = new Date(cts).toString();
+    //let cdate = new Date(cts).toLocaleString();
 
     return (
       <nav class="navbar">
@@ -14,7 +15,7 @@ class Header extends Component {
           <div class="navbar-header ">
             <h1>{this.props.title} Message Board</h1>
             {/* <h2>{this.props.date}</h2> */}
-            {cdate}
+            {cDate}
           </div>
         </div>
       </nav>

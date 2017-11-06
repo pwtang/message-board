@@ -10,19 +10,21 @@ class App extends Component {
     super(props);
     this.state = {
       messages: [
-        { id: uuid.v4(), text: "First", likes: 0 },
-        { id: uuid.v4(), text: "Second", likes: 1 },
-        { id: uuid.v4(), text: "Third", likes: 2 },
-        { id: uuid.v4(), text: "Fourth", likes: 3 },
-        { id: uuid.v4(), text: "Fifth", likes: 4 }
+        { id: uuid.v4(), text: "First", likes: 0, dateTime: 1509978162700 },
+        { id: uuid.v4(), text: "Second", likes: 1, dateTime: 1509978262700 },
+        { id: uuid.v4(), text: "Third", likes: 2, dateTime: 1509978362700 },
+        { id: uuid.v4(), text: "Fourth", likes: 3, dateTime: 1509978462700 },
+        { id: uuid.v4(), text: "Fifth", likes: 4, dateTime: 1509978852700 }
       ],
-      sortAsc: "true"
+      sortLikesAsc: "true",
+      sortDateAsc: "true"
     };
     this.handleLike = this.handleLike.bind(this);
     this.handleDislike = this.handleDislike.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handlePost = this.handlePost.bind(this);
-    this.handleSort = this.handleSort.bind(this);
+    this.handleLikesSort = this.handleLikesSort.bind(this);
+    this.handleDateSort = this.handleDateSort.bind(this);
     this.toggleFlag = this.toggleFlag.bind(this);
   }
 
@@ -53,7 +55,14 @@ class App extends Component {
 
   handlePost(text) {
     // console.log("handlePost method");
-    const message = { id: uuid.v4(), text: text, likes: 0 };
+    let now = require("date-now");
+
+    const message = {
+      id: uuid.v4(),
+      text: text,
+      likes: 0,
+      dateTime: now()
+    };
     console.log("new message: ", message);
     this.state.messages.push(message);
     console.log("push");
@@ -68,25 +77,44 @@ class App extends Component {
     return toggle;
   }
 
-  handleSort() {
-    //console.log("sort flag:", this.state.sortAsc);
-    if (this.state.sortAsc) {
+  handleLikesSort() {
+    //console.log("sort flag:", this.state.sortLikesAsc);
+    if (this.state.sortLikesAsc) {
       this.state.messages.sort((a, b) => {
         return a.likes - b.likes;
       });
     } else {
-      //console.log("sort des");
       this.state.messages.sort((a, b) => {
         return b.likes - a.likes;
       });
     }
 
-    this.state.sortAsc = this.toggleFlag(this.state.sortAsc);
-    console.log("sort flag:", this.state.sortAsc);
+    this.state.sortLikesAsc = this.toggleFlag(this.state.sortLikesAsc);
+    //console.log("sort flag:", this.state.sortLikesAsc);
 
     this.setState({
       messages: this.state.messages,
-      sortAsc: this.state.sortAsc
+      sortLikesAsc: this.state.sortLikesAsc
+    });
+  }
+
+  handleDateSort() {
+    //console.log("sort flag:", this.state.sortAsc);
+    if (this.state.sortDateAsc) {
+      this.state.messages.sort((a, b) => {
+        return a.dateTime - b.dateTime;
+      });
+    } else {
+      this.state.messages.sort((a, b) => {
+        return b.dateTime - a.dateTime;
+      });
+    }
+    this.state.sortDateAsc = this.toggleFlag(this.state.sortDateAsc);
+    //console.log("sort flag:", this.state.sortAsc);
+
+    this.setState({
+      messages: this.state.messages,
+      sortDateAsc: this.state.sortDateAsc
     });
   }
 
@@ -110,9 +138,13 @@ class App extends Component {
           <div class="panel-group">
             <div class="panel panel-default">
               <div class="panel-heading">Message Board</div>
-              <button onClick={this.handleSort}>v Likes ^</button>
-              <button onClick={this.handleSort}>v Date ^</button>
-
+              <button class="pull-right" onClick={this.handleLikesSort}>
+                v Likes ^
+              </button>
+              <button class="pull-right" onClick={this.handleDateSort}>
+                v Date ^
+              </button>
+              <br />
               <div class="panel-body">
                 <ul class="message-board">
                   {this.state.messages.map(message => {
@@ -121,6 +153,7 @@ class App extends Component {
                         text={message.text}
                         likes={message.likes}
                         id={message.id}
+                        dateTime={message.dateTime}
                         onLike={this.handleLike}
                         onDislike={this.handleDislike}
                         onDelete={this.handleDelete}
