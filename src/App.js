@@ -15,13 +15,15 @@ class App extends Component {
         { id: uuid.v4(), text: "Third", likes: 2 },
         { id: uuid.v4(), text: "Fourth", likes: 3 },
         { id: uuid.v4(), text: "Fifth", likes: 4 }
-      ]
-      //postMessage: "something"
+      ],
+      sortAsc: "true"
     };
     this.handleLike = this.handleLike.bind(this);
     this.handleDislike = this.handleDislike.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handlePost = this.handlePost.bind(this);
+    this.handleSort = this.handleSort.bind(this);
+    this.toggleFlag = this.toggleFlag.bind(this);
   }
 
   handleLike(id) {
@@ -61,6 +63,33 @@ class App extends Component {
     });
   }
 
+  toggleFlag(flag) {
+    let toggle = flag ? false : true;
+    return toggle;
+  }
+
+  handleSort() {
+    //console.log("sort flag:", this.state.sortAsc);
+    if (this.state.sortAsc) {
+      this.state.messages.sort((a, b) => {
+        return a.likes - b.likes;
+      });
+    } else {
+      //console.log("sort des");
+      this.state.messages.sort((a, b) => {
+        return b.likes - a.likes;
+      });
+    }
+
+    this.state.sortAsc = this.toggleFlag(this.state.sortAsc);
+    console.log("sort flag:", this.state.sortAsc);
+
+    this.setState({
+      messages: this.state.messages,
+      sortAsc: this.state.sortAsc
+    });
+  }
+
   render() {
     return (
       //note always have one enclosing tab containing all the code e.g. <div></div>
@@ -81,6 +110,9 @@ class App extends Component {
           <div class="panel-group">
             <div class="panel panel-default">
               <div class="panel-heading">Message Board</div>
+              <button onClick={this.handleSort}>v Likes ^</button>
+              <button onClick={this.handleSort}>v Date ^</button>
+
               <div class="panel-body">
                 <ul class="message-board">
                   {this.state.messages.map(message => {
