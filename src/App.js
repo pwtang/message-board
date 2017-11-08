@@ -10,15 +10,21 @@ class App extends Component {
     super(props);
     this.state = {
       messages: [
-        { id: uuid.v4(), text: "First", likes: 0, dateTime: 1509978162700 },
-        { id: uuid.v4(), text: "Second", likes: 1, dateTime: 1509978262700 },
-        { id: uuid.v4(), text: "Third", likes: 2, dateTime: 1509978362700 },
-        { id: uuid.v4(), text: "Fourth", likes: 3, dateTime: 1509978462700 },
+        { id: uuid.v4(), text: "First", likes: 0, dateTime: 1501278162700 },
+        { id: uuid.v4(), text: "Second", likes: 1, dateTime: 1508858262700 },
+        { id: uuid.v4(), text: "Third", likes: 2, dateTime: 1509878362700 },
+        { id: uuid.v4(), text: "Fourth", likes: 3, dateTime: 1509968462700 },
         { id: uuid.v4(), text: "Fifth", likes: 4, dateTime: 1509978852700 },
         {
           id: uuid.v4(),
           text: "A longer string for testing. XYz A Bc",
           likes: 20,
+          dateTime: 1509978862700
+        },
+        {
+          id: uuid.v4(),
+          text: `Lorem ipsum dolor sit amet, aperiri vivendum aliquando mel ut  `,
+          likes: 8,
           dateTime: 1509978862700
         }
       ],
@@ -33,7 +39,7 @@ class App extends Component {
     this.handleLikesSort = this.handleLikesSort.bind(this);
     this.handleDateSort = this.handleDateSort.bind(this);
     this.toggleFlag = this.toggleFlag.bind(this);
-    this.handleExactSearch = this.handleExactSearch.bind(this);
+    //this.handleExactSearch = this.handleExactSearch.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleResetSearch = this.handleResetSearch.bind(this);
   }
@@ -133,24 +139,24 @@ class App extends Component {
     this.setState({ searchText: event.target.value });
   }
 
-  handleExactSearch() {
-    const searchQuery = this.state.searchText.toString().toLowerCase();
-    //const blah = "aSdfEFFaf";
-    // const blahLower = blah.toString().toLowerCase();
-    // console.log(blahLower);
-    console.log("handleSearch - ", searchQuery);
-    const searchResult = this.state.messages.filter(message =>
-      message.text
-        .toString()
-        .toLowerCase()
-        .includes(searchQuery)
-    );
-    console.log("Results found:", searchResult.length);
-    console.log(searchResult[0].text);
-    this.setState({
-      //searchText: searchResult
-    });
-  }
+  // handleExactSearch() {
+  //   const searchQuery = this.state.searchText.toString().toLowerCase();
+  //   //const blah = "aSdfEFFaf";
+  //   // const blahLower = blah.toString().toLowerCase();
+  //   // console.log(blahLower);
+  //   console.log("handleSearch - ", searchQuery);
+  //   const searchResult = this.state.messages.filter(message =>
+  //     message.text
+  //       .toString()
+  //       .toLowerCase()
+  //       .includes(searchQuery)
+  //   );
+  //   console.log("Results found:", searchResult.length);
+  //   console.log(searchResult[0].text);
+  //   this.setState({
+  //     //searchText: searchResult
+  //   });
+  // }
 
   handleResetSearch(event) {
     this.setState({ searchText: "" });
