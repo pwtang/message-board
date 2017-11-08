@@ -27,7 +27,8 @@ class Message extends Component {
     return (
       <div>
         <li>
-          Hello 👋 {this.props.text}
+          {/* Hello 👋  */}
+          {this.props.text}
           <i class="fa fa-trash pull-right delete" onClick={this.handleTrash} />
           <i class="pull-right"> {mDate} </i>
           <i

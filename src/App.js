@@ -14,10 +14,17 @@ class App extends Component {
         { id: uuid.v4(), text: "Second", likes: 1, dateTime: 1509978262700 },
         { id: uuid.v4(), text: "Third", likes: 2, dateTime: 1509978362700 },
         { id: uuid.v4(), text: "Fourth", likes: 3, dateTime: 1509978462700 },
-        { id: uuid.v4(), text: "Fifth", likes: 4, dateTime: 1509978852700 }
+        { id: uuid.v4(), text: "Fifth", likes: 4, dateTime: 1509978852700 },
+        {
+          id: uuid.v4(),
+          text: "A longer string for testing. XYz A Bc",
+          likes: 20,
+          dateTime: 1509978862700
+        }
       ],
       sortLikesAsc: "true",
-      sortDateAsc: "true"
+      sortDateAsc: "true",
+      searchText: ""
     };
     this.handleLike = this.handleLike.bind(this);
     this.handleDislike = this.handleDislike.bind(this);
@@ -26,6 +33,9 @@ class App extends Component {
     this.handleLikesSort = this.handleLikesSort.bind(this);
     this.handleDateSort = this.handleDateSort.bind(this);
     this.toggleFlag = this.toggleFlag.bind(this);
+    this.handleExactSearch = this.handleExactSearch.bind(this);
+    this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleResetSearch = this.handleResetSearch.bind(this);
   }
 
   handleLike(id) {
@@ -98,6 +108,7 @@ class App extends Component {
     });
   }
 
+  //to do, combine date and like sort to one?
   handleDateSort() {
     //console.log("sort flag:", this.state.sortAsc);
     if (this.state.sortDateAsc) {
@@ -116,6 +127,33 @@ class App extends Component {
       messages: this.state.messages,
       sortDateAsc: this.state.sortDateAsc
     });
+  }
+
+  handleOnChange(event) {
+    this.setState({ searchText: event.target.value });
+  }
+
+  handleExactSearch() {
+    const searchQuery = this.state.searchText.toString().toLowerCase();
+    //const blah = "aSdfEFFaf";
+    // const blahLower = blah.toString().toLowerCase();
+    // console.log(blahLower);
+    console.log("handleSearch - ", searchQuery);
+    const searchResult = this.state.messages.filter(message =>
+      message.text
+        .toString()
+        .toLowerCase()
+        .includes(searchQuery)
+    );
+    console.log("Results found:", searchResult.length);
+    console.log(searchResult[0].text);
+    this.setState({
+      //searchText: searchResult
+    });
+  }
+
+  handleResetSearch(event) {
+    this.setState({ searchText: "" });
   }
 
   render() {
@@ -144,22 +182,60 @@ class App extends Component {
               <button class="pull-right" onClick={this.handleDateSort}>
                 v Date ^
               </button>
+              {/* <form onSubmit={this.handleExactSearch(searchBox)}>
+                <label>Search: </label>
+                <input id="searchBox" type="text" onChange=/>
+                <button id="submitSearch">Find</button>
+              </form> */}
+              <form id="message-search-form" className="cf">
+                <input
+                  id="search"
+                  ref="searchInput"
+                  type="text"
+                  name="search"
+                  placeholder="Search Messages..."
+                  value={this.state.searchText}
+                  onChange={this.handleOnChange}
+                />
+                {/* <span ref="clear" className="hide" onClick={this.handleClear}>
+                  <i className="fa fa-times-circle" />
+                </span> */}
+                {/* <button
+                  className="search-button"
+                  onClick={this.handleExactSearch}
+                >
+                  Find
+                </button> */}
+                <button
+                  className="search-button"
+                  onClick={this.handleResetSearch}
+                >
+                  Clear
+                </button>
+              </form>
               <br />
               <div class="panel-body">
                 <ul class="message-board">
-                  {this.state.messages.map(message => {
-                    return (
-                      <Message
-                        text={message.text}
-                        likes={message.likes}
-                        id={message.id}
-                        dateTime={message.dateTime}
-                        onLike={this.handleLike}
-                        onDislike={this.handleDislike}
-                        onDelete={this.handleDelete}
-                      />
-                    );
-                  })}
+                  {this.state.messages
+                    .filter(message =>
+                      message.text
+                        .toString()
+                        .toLowerCase()
+                        .includes(this.state.searchText)
+                    )
+                    .map(message => {
+                      return (
+                        <Message
+                          text={message.text}
+                          likes={message.likes}
+                          id={message.id}
+                          dateTime={message.dateTime}
+                          onLike={this.handleLike}
+                          onDislike={this.handleDislike}
+                          onDelete={this.handleDelete}
+                        />
+                      );
+                    })}
                 </ul>
               </div>
             </div>
