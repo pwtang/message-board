@@ -1,3 +1,7 @@
+/**
+* Header Component
+* Displays Message board title header and the date with timezome
+**/
 import React, { Component } from "react";
 
 class Header extends Component {

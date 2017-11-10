@@ -1,3 +1,7 @@
+/**
+* Message Component
+* Displays message with like, dislike, time posted and delete message
+**/
 import React, { Component } from "react";
 
 class Message extends Component {
@@ -27,7 +31,6 @@ class Message extends Component {
     return (
       <div>
         <li>
-          {/* Hello 👋  */}
           {this.props.text}
           <i class="fa fa-trash pull-right delete" onClick={this.handleTrash} />
           <i class="pull-right"> {mDate} </i>

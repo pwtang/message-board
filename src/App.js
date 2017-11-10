@@ -1,3 +1,8 @@
+/**
+* Main App
+* Stores default Messages to be displayed
+* Imports Header, Message, Post Components
+*/
 import React, { Component } from "react";
 import "./App.css";
 import Header from "./Header";
@@ -39,9 +44,8 @@ class App extends Component {
     this.handleLikesSort = this.handleLikesSort.bind(this);
     this.handleDateSort = this.handleDateSort.bind(this);
     this.toggleFlag = this.toggleFlag.bind(this);
-    //this.handleExactSearch = this.handleExactSearch.bind(this);
-    this.handleOnChange = this.handleOnChange.bind(this);
-    this.handleResetSearch = this.handleResetSearch.bind(this);
+    this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
+    this.handleClearSearch = this.handleClearSearch.bind(this);
   }
 
   handleLike(id) {
@@ -70,7 +74,6 @@ class App extends Component {
   }
 
   handlePost(text) {
-    // console.log("handlePost method");
     let now = require("date-now");
 
     const message = {
@@ -81,13 +84,12 @@ class App extends Component {
     };
     console.log("new message: ", message);
     this.state.messages.push(message);
-    console.log("push");
     this.setState({
       messages: this.state.messages
-      //if uncommented, this causes error in map messages method
     });
   }
 
+  // takes an input and returns true if false, else returns to true
   toggleFlag(flag) {
     let toggle = flag ? false : true;
     return toggle;
@@ -105,18 +107,17 @@ class App extends Component {
       });
     }
 
-    this.state.sortLikesAsc = this.toggleFlag(this.state.sortLikesAsc);
+    //this.state.sortLikesAsc = this.toggleFlag(this.state.sortLikesAsc);
     //console.log("sort flag:", this.state.sortLikesAsc);
 
     this.setState({
       messages: this.state.messages,
-      sortLikesAsc: this.state.sortLikesAsc
+      sortLikesAsc: this.toggleFlag(this.state.sortLikesAsc)
     });
   }
 
-  //to do, combine date and like sort to one?
+  //to do, combine date and like sort to one
   handleDateSort() {
-    //console.log("sort flag:", this.state.sortAsc);
     if (this.state.sortDateAsc) {
       this.state.messages.sort((a, b) => {
         return a.dateTime - b.dateTime;
@@ -126,40 +127,23 @@ class App extends Component {
         return b.dateTime - a.dateTime;
       });
     }
-    this.state.sortDateAsc = this.toggleFlag(this.state.sortDateAsc);
-    //console.log("sort flag:", this.state.sortAsc);
+    //this.state.sortDateAsc = this.toggleFlag(this.state.sortDateAsc);
 
     this.setState({
       messages: this.state.messages,
-      sortDateAsc: this.state.sortDateAsc
+      sortDateAsc: this.toggleFlag(this.state.sortDateAsc)
     });
   }
 
-  handleOnChange(event) {
+  handleSearchInputChange(event) {
     this.setState({ searchText: event.target.value });
   }
 
-  // handleExactSearch() {
-  //   const searchQuery = this.state.searchText.toString().toLowerCase();
-  //   //const blah = "aSdfEFFaf";
-  //   // const blahLower = blah.toString().toLowerCase();
-  //   // console.log(blahLower);
-  //   console.log("handleSearch - ", searchQuery);
-  //   const searchResult = this.state.messages.filter(message =>
-  //     message.text
-  //       .toString()
-  //       .toLowerCase()
-  //       .includes(searchQuery)
-  //   );
-  //   console.log("Results found:", searchResult.length);
-  //   console.log(searchResult[0].text);
-  //   this.setState({
-  //     //searchText: searchResult
-  //   });
-  // }
-
-  handleResetSearch(event) {
-    this.setState({ searchText: "" });
+  handleClearSearch(event) {
+    this.setState({
+      searchText: ""
+    });
+    event.preventDefault();
   }
 
   render() {
@@ -174,7 +158,6 @@ class App extends Component {
               <div class="panel-heading">Post a message</div>
               <div class="panel-body">
                 <Post onPost={this.handlePost} />
-                {/* <Post text={postMessage.text} onPost={this.handlePost} /> */}
               </div>
             </div>
           </div>
@@ -188,38 +171,17 @@ class App extends Component {
               <button class="pull-right" onClick={this.handleDateSort}>
                 v Date ^
               </button>
-              {/* <form onSubmit={this.handleExactSearch(searchBox)}>
-                <label>Search: </label>
-                <input id="searchBox" type="text" onChange=/>
-                <button id="submitSearch">Find</button>
-              </form> */}
-              <form id="message-search-form" className="cf">
+              <form id="message-search-form" onSubmit={this.handleClearSearch}>
                 <input
                   id="search"
-                  ref="searchInput"
                   type="text"
-                  name="search"
                   placeholder="Search Messages..."
                   value={this.state.searchText}
-                  onChange={this.handleOnChange}
+                  onChange={this.handleSearchInputChange}
                 />
-                {/* <span ref="clear" className="hide" onClick={this.handleClear}>
-                  <i className="fa fa-times-circle" />
-                </span> */}
-                {/* <button
-                  className="search-button"
-                  onClick={this.handleExactSearch}
-                >
-                  Find
-                </button> */}
-                <button
-                  className="search-button"
-                  onClick={this.handleResetSearch}
-                >
-                  Clear
-                </button>
+                <button id="clear">Clear</button>
               </form>
-              <br />
+
               <div class="panel-body">
                 <ul class="message-board">
                   {this.state.messages
